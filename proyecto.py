@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Configuración de Streamlit
-st.title('Análisis de Datos de Salud y Economía')
+st.title('cientificos inteligentes')
 
 # Cargar el archivo CSV usando el cargador de archivos de Streamlit
 archivo_csv = st.file_uploader("Sube tu archivo CSV", type="csv")
