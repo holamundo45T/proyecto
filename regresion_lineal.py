@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 # Configuración de Streamlit
-st.title('Análisis de Datos de Salud y Economía')
+st.title('CIENTIFICOS INTELIGENTES')
 
 # Cargar el archivo CSV usando el cargador de archivos de Streamlit
 archivo_csv = st.file_uploader("Sube tu archivo CSV", type="csv")
