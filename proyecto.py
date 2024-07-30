@@ -14,16 +14,24 @@ if archivo_csv:
         # Cargar los datos
         data = pd.read_csv(archivo_csv)
 
+        # Limpiar nombres de columnas
+        data.columns = data.columns.str.strip()
+
+        # Verificar las columnas
+        st.write("Columnas disponibles:", data.columns)
+
         # Mostrar las primeras filas del dataset
         st.write(data.head())
 
         # Función para graficar y mostrar gráficos en Streamlit
-        def plot_and_show(data, x, y, title, xlabel, ylabel, plot_type='line', color='blue'):
+        def plot_and_show(data, x, y=None, title='', xlabel='', ylabel='', plot_type='bar', color='blue'):
             plt.figure(figsize=(10, 6))
-            if plot_type == 'line':
-                sns.lineplot(x=x, y=y, data=data, color=color)
-            elif plot_type == 'bar':
+            if plot_type == 'bar':
                 sns.barplot(x=x, y=y, data=data, color=color)
+            elif plot_type == 'line':
+                sns.lineplot(x=x, y=y, data=data, color=color)
+            elif plot_type == 'hist':
+                sns.histplot(data[x], kde=True, color=color)
             plt.title(title)
             plt.xlabel(xlabel)
             plt.ylabel(ylabel)
@@ -31,23 +39,35 @@ if archivo_csv:
             st.pyplot(plt.gcf())
             plt.close()
 
-        # Gráfico de Expectativa de Vida a lo largo de los años (Líneas)
-        plot_and_show(data, 'Year', 'Life expectancy ', 'Life Expectancy Over the Years', 'Year', 'Life Expectancy', 'line', 'teal')
+        # Gráfico de IQ de los científicos (Histograma)
+        if 'IQ' in data.columns:
+            plot_and_show(data, x='IQ', title='IQ Distribution', xlabel='IQ', ylabel='Frequency', plot_type='hist', color='teal')
+        else:
+            st.error("La columna 'IQ' no se encuentra en el archivo.")
 
-        # Gráfico de Mortalidad Adulta a lo largo de los años (Barras)
-        plot_and_show(data, 'Year', 'Adult Mortality', 'Adult Mortality Over the Years', 'Year', 'Adult Mortality', 'bar', 'coral')
+        # Gráfico de Birth Year de los científicos (Histograma)
+        if 'Birth Year' in data.columns:
+            plot_and_show(data, x='Birth Year', title='Birth Year Distribution', xlabel='Birth Year', ylabel='Frequency', plot_type='hist', color='coral')
+        else:
+            st.error("La columna 'Birth Year' no se encuentra en el archivo.")
 
-        # Gráfico de Muertes Infantiles a lo largo de los años (Líneas)
-        plot_and_show(data, 'Year', 'infant deaths', 'Infant Deaths Over the Years', 'Year', 'Infant Deaths', 'line', 'green')
+        # Gráfico de Género de los científicos (Barras)
+        if 'Gender' in data.columns:
+            plot_and_show(data, x='Gender', title='Gender Distribution', xlabel='Gender', ylabel='Count', plot_type='bar', color='green')
+        else:
+            st.error("La columna 'Gender' no se encuentra en el archivo.")
 
-        # Gráfico de Consumo de Alcohol a lo largo de los años (Barras)
-        plot_and_show(data, 'Year', 'Alcohol', 'Alcohol Consumption Over the Years', 'Year', 'Alcohol Consumption', 'bar', 'orange')
+        # Gráfico de Países de los científicos (Barras)
+        if 'Country' in data.columns:
+            plot_and_show(data, x='Country', title='Country Distribution', xlabel='Country', ylabel='Count', plot_type='bar', color='blue')
+        else:
+            st.error("La columna 'Country' no se encuentra en el archivo.")
 
-        # Gráfico de PIB a lo largo de los años (Líneas)
-        plot_and_show(data, 'Year', 'GDP', 'GDP Over the Years', 'Year', 'GDP', 'line', 'purple')
-
-        # Gráfico de Escolaridad a lo largo de los años (Barras)
-        plot_and_show(data, 'Year', 'Schooling', 'Schooling Over the Years', 'Year', 'Schooling', 'bar', 'blue')
+        # Gráfico de Campos de especialización (Barras)
+        if 'Field of Expertise' in data.columns:
+            plot_and_show(data, x='Field of Expertise', title='Field of Expertise Distribution', xlabel='Field of Expertise', ylabel='Count', plot_type='bar', color='orange')
+        else:
+            st.error("La columna 'Field of Expertise' no se encuentra en el archivo.")
 
     except pd.errors.EmptyDataError:
         st.error("El archivo está vacío. Por favor, verifique el contenido del archivo.")
